@@ -25,6 +25,9 @@ func (e *Endpoint) getState() State {
 	if res.StatusCode != http.StatusOK {
 		return ErrorState(e.name, errors.New("service "+e.name+" returned http status: "+res.Status))
 	}
+	if res.Body == nil {
+		return ErrorState(e.name, errors.New("service "+e.name+" returned no response body"))
+	}
 	var state State
 	if err := json.NewDecoder(res.Body).Decode(&state); err != nil {
 		return ErrorState(e.name, err)

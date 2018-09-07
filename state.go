@@ -8,7 +8,7 @@ type State struct {
 	Name         string  `json:"name"`
 	Ok           bool    `json:"active"`
 	Status       string  `json:"status"`
-	Dependencies []State `json:"dependencies"`
+	Dependencies []State `json:"dependencies,omitempty"`
 }
 
 func ErrorState(name string, err error) State {
