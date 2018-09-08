@@ -2,11 +2,11 @@ package detective
 
 import (
 	"bytes"
+	"encoding/json"
 	dm "github.com/sohamkamani/detective/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -34,7 +34,7 @@ func TestDetective(t *testing.T) {
 			State{Name: "sample", Ok: true, Status: "Ok"},
 		},
 	}
-	assert.Equal(t, expectedState, s)
+	assertStatesEqual(t, expectedState, s)
 	assert.True(t, depCalled)
 
 	t.Run("handler", func(t *testing.T) {
@@ -46,7 +46,9 @@ func TestDetective(t *testing.T) {
 		handler(rw, req)
 		res := rw.Result()
 		assert.Equal(t, http.StatusOK, res.StatusCode)
-		b, err := ioutil.ReadAll(res.Body)
-		assert.JSONEq(t, `{"status":"Ok", "dependencies":[{"active":true, "status":"Ok", "name":"sampledep"}, {"name":"sample", "active":true, "status":"Ok"}], "name":"sample", "active":true}`, string(b))
+		var gotState State
+		json.NewDecoder(res.Body).Decode(&gotState)
+		defer res.Body.Close()
+		assertStatesEqual(t, expectedState, gotState)
 	})
 }

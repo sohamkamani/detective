@@ -1,5 +1,9 @@
 package detective
 
+import (
+	"time"
+)
+
 type DetectorFunc func() error
 
 type Dependency struct {
@@ -30,8 +34,10 @@ func (d *Dependency) updateState() {
 }
 
 func (d *Dependency) getState() State {
+	init := time.Now()
 	err := d.detector()
-	s := State{Name: d.name}
+	diff := time.Now().Sub(init)
+	s := State{Name: d.name, Latency: diff}
 	if err != nil {
 		return s.WithError(err)
 	}

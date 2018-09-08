@@ -2,13 +2,15 @@ package detective
 
 import (
 	"errors"
+	"time"
 )
 
 type State struct {
-	Name         string  `json:"name"`
-	Ok           bool    `json:"active"`
-	Status       string  `json:"status"`
-	Dependencies []State `json:"dependencies,omitempty"`
+	Name         string        `json:"name"`
+	Ok           bool          `json:"active"`
+	Status       string        `json:"status"`
+	Latency      time.Duration `json:"latency"`
+	Dependencies []State       `json:"dependencies,omitempty"`
 }
 
 func (s State) WithError(err error) State {
