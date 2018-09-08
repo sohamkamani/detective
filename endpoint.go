@@ -28,6 +28,7 @@ func (e *Endpoint) getState() State {
 	if res.Body == nil {
 		return ErrorState(e.name, errors.New("service "+e.name+" returned no response body"))
 	}
+	defer res.Body.Close()
 	var state State
 	if err := json.NewDecoder(res.Body).Decode(&state); err != nil {
 		return ErrorState(e.name, err)

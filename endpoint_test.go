@@ -74,6 +74,13 @@ func TestEndpoint(t *testing.T) {
 			expectedState: State{},
 		},
 		{
+			name:       "incorrect json",
+			httpStatus: http.StatusOK,
+			jsonResponse: `{
+				"some":"random"`,
+			expectedState: State{Name: "sample", Ok: false, Status: "Error: unexpected EOF"},
+		},
+		{
 			name:          "http failure",
 			httpError:     errors.New("failed"),
 			expectedState: State{Name: "sample", Ok: false, Status: "Error: failed"},

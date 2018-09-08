@@ -20,6 +20,11 @@ func New(name string) *Detective {
 	}
 }
 
+func (d *Detective) WithHTTPClient(c Doer) *Detective {
+	d.client = c
+	return d
+}
+
 func (d *Detective) Dependency(name string) *Dependency {
 	dependency := NewDependency(name)
 	d.dependencies = append(d.dependencies, dependency)
