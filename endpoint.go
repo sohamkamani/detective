@@ -19,19 +19,20 @@ type Endpoint struct {
 func (e *Endpoint) getState() State {
 	currentReq := e.req
 	res, err := e.client.Do(&currentReq)
+	s := State{Name: e.name}
 	if err != nil {
-		return ErrorState(e.name, err)
+		return s.WithError(err)
 	}
 	if res.StatusCode != http.StatusOK {
-		return ErrorState(e.name, errors.New("service "+e.name+" returned http status: "+res.Status))
+		return s.WithError(errors.New("service " + e.name + " returned http status: " + res.Status))
 	}
 	if res.Body == nil {
-		return ErrorState(e.name, errors.New("service "+e.name+" returned no response body"))
+		return s.WithError(errors.New("service " + e.name + " returned no response body"))
 	}
 	defer res.Body.Close()
 	var state State
 	if err := json.NewDecoder(res.Body).Decode(&state); err != nil {
-		return ErrorState(e.name, err)
+		return s.WithError(err)
 	}
-	return state
+	return state.WithOk()
 }

@@ -31,8 +31,9 @@ func (d *Dependency) updateState() {
 
 func (d *Dependency) getState() State {
 	err := d.detector()
+	s := State{Name: d.name}
 	if err != nil {
-		return ErrorState(d.name, err)
+		return s.WithError(err)
 	}
-	return NormalState(d.name)
+	return s.WithOk()
 }

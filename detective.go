@@ -68,7 +68,8 @@ func (d *Detective) getState() State {
 		}()
 	}
 	wg.Wait()
-	return DependentState(d.name, subStates)
+	s := State{Name: d.name}
+	return s.WithDependencies(subStates)
 }
 
 func (d *Detective) Handler() http.HandlerFunc {

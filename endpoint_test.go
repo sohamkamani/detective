@@ -71,7 +71,7 @@ func TestEndpoint(t *testing.T) {
 				"some":"random",
 				"response": 0
 			}`,
-			expectedState: State{},
+			expectedState: State{Name: "", Ok: true, Status: "Ok"},
 		},
 		{
 			name:       "incorrect json",

@@ -11,35 +11,30 @@ type State struct {
 	Dependencies []State `json:"dependencies,omitempty"`
 }
 
-func ErrorState(name string, err error) State {
+func (s State) WithError(err error) State {
 	if err == nil {
-		return NormalState(name)
+		return s.WithOk()
 	}
-	return State{
-		Name:   name,
-		Ok:     false,
-		Status: "Error: " + err.Error(),
-	}
+	ns := s
+	ns.Ok = false
+	ns.Status = "Error: " + err.Error()
+	return ns
 }
 
-func NormalState(name string) State {
-	return State{
-		Name:   name,
-		Ok:     true,
-		Status: "Ok",
-	}
+func (s State) WithOk() State {
+	ns := s
+	ns.Ok = true
+	ns.Status = "Ok"
+	return ns
 }
 
-func DependentState(name string, dependencies []State) State {
-	var finalState State
-	if !NoErrors(dependencies) {
-		finalState = ErrorState(name, errors.New("dependency failure"))
-	} else {
-		finalState = NormalState(name)
-	}
-	finalState.Name = name
+func (s State) WithDependencies(dependencies []State) State {
+	finalState := s
 	finalState.Dependencies = dependencies
-	return finalState
+	if !NoErrors(dependencies) {
+		return finalState.WithError(errors.New("dependency failure"))
+	}
+	return finalState.WithOk()
 }
 
 func NoErrors(states []State) bool {
