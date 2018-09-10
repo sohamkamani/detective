@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// A Detective instance manages registered dependencies and endpoints.
+// Dependencies can be registered with an instance.
+// Each instance has a state which represents the health of its components.
 type Detective struct {
 	name         string
 	client       Doer
@@ -13,6 +16,7 @@ type Detective struct {
 	endpoints    []*Endpoint
 }
 
+// Create a new Detective instance. To avoid confusion, the name provided should preferably be unique among dependent detective instances.
 func New(name string) *Detective {
 	return &Detective{
 		name:   name,
@@ -20,11 +24,13 @@ func New(name string) *Detective {
 	}
 }
 
+// Sets the HTTP Client to be used while hitting the endpoint of another detective HTTP ping handler.
 func (d *Detective) WithHTTPClient(c Doer) *Detective {
 	d.client = c
 	return d
 }
 
+// Adds a new dependency to the Detective instance. The name provided should preferably be unique among dependencies registered within the same detective instance.
 func (d *Detective) Dependency(name string) *Dependency {
 	dependency := NewDependency(name)
 	d.dependencies = append(d.dependencies, dependency)

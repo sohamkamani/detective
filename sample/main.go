@@ -37,13 +37,13 @@ func main() {
 		}
 	}()
 
-	g := detective.New("sample2")
-	g1 := g.Dependency("db")
+	d2 := detective.New("sample2")
+	g1 := d2.Dependency("db")
 	g1.Detect(func() error {
 		time.Sleep(500 * time.Millisecond)
 		return errors.New("dkcndkcn")
 	})
-	pingHandler2 := g.Handler()
+	pingHandler2 := d2.Handler()
 
 	if err := http.ListenAndServe(":8080", http.HandlerFunc(pingHandler2)); err != nil {
 		panic(err)

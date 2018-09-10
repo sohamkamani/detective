@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 )
 
 type Doer interface {
@@ -17,9 +18,11 @@ type Endpoint struct {
 }
 
 func (e *Endpoint) getState() State {
+	init := time.Now()
 	currentReq := e.req
 	res, err := e.client.Do(&currentReq)
-	s := State{Name: e.name}
+	diff := time.Now().Sub(init)
+	s := State{Name: e.name, Latency: diff}
 	if err != nil {
 		return s.WithError(err)
 	}
