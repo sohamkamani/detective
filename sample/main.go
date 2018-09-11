@@ -29,10 +29,8 @@ func main() {
 		return nil
 	})
 	d.Endpoint("http://localhost:8080")
-	pingHandler := d.Handler()
-
 	go func() {
-		if err := http.ListenAndServe(":8081", http.HandlerFunc(pingHandler)); err != nil {
+		if err := http.ListenAndServe(":8081", d); err != nil {
 			panic(err)
 		}
 	}()
@@ -43,9 +41,8 @@ func main() {
 		time.Sleep(500 * time.Millisecond)
 		return errors.New("dkcndkcn")
 	})
-	pingHandler2 := d2.Handler()
 
-	if err := http.ListenAndServe(":8080", http.HandlerFunc(pingHandler2)); err != nil {
+	if err := http.ListenAndServe(":8080", d2); err != nil {
 		panic(err)
 	}
 

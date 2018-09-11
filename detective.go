@@ -16,7 +16,7 @@ type Detective struct {
 	endpoints    []*Endpoint
 }
 
-// Create a new Detective instance. To avoid confusion, the name provided should preferably be unique among dependent detective instances.
+// New creates a new Detective instance. To avoid confusion, the name provided should preferably be unique among dependent detective instances.
 func New(name string) *Detective {
 	return &Detective{
 		name:   name,
@@ -24,19 +24,20 @@ func New(name string) *Detective {
 	}
 }
 
-// Sets the HTTP Client to be used while hitting the endpoint of another detective HTTP ping handler.
+// WithHTTPClient sets the HTTP Client to be used while hitting the endpoint of another detective HTTP ping handler.
 func (d *Detective) WithHTTPClient(c Doer) *Detective {
 	d.client = c
 	return d
 }
 
-// Adds a new dependency to the Detective instance. The name provided should preferably be unique among dependencies registered within the same detective instance.
+// Dependency adds a new dependency to the Detective instance. The name provided should preferably be unique among dependencies registered within the same detective instance.
 func (d *Detective) Dependency(name string) *Dependency {
 	dependency := NewDependency(name)
 	d.dependencies = append(d.dependencies, dependency)
 	return dependency
 }
 
+// Endpoint adds an HTTP endpoint as a dependency to the Detective instance, thereby allowing you to compose detective instances. This method creates a GET request to the provided url. If you want to customize the request (like using a different HTTP method, or adding headers), consider using the EndpointReq method instead.
 func (d *Detective) Endpoint(url string) error {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -46,6 +47,7 @@ func (d *Detective) Endpoint(url string) error {
 	return nil
 }
 
+// EndpointReq is similar to Endpoint, but takes an HTTP request object instead of a URL. Use this method if you want to customize the request to the ping handler of another detective instance.
 func (d *Detective) EndpointReq(req *http.Request) {
 	e := &Endpoint{
 		client: d.client,
@@ -78,15 +80,14 @@ func (d *Detective) getState() State {
 	return s.WithDependencies(subStates)
 }
 
-func (d *Detective) Handler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		s := d.getState()
-		sBody, err := json.Marshal(s)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		w.Write(sBody)
+// ServeHTTP is the HTTP handler function for getting the state of the Detective instance
+func (d *Detective) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s := d.getState()
+	sBody, err := json.Marshal(s)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	w.Write(sBody)
+	return
 }

@@ -19,7 +19,8 @@ A Detective instance represents a group of dependencies. A dependency can be any
 	})
 
 	// Create a ping endpoint which checks the health of all dependencies
-	http.ListenAndServe(":8080", http.HandlerFunc(d.Handler()))
+	// A Detective instance implements the http.Handler interface
+	http.ListenAndServe(":8080", d)
 
 The ping endpoint will check the health of all dependencies by calling their detector function registered in the "Detect" method
 
@@ -33,7 +34,7 @@ The endpoint that was defined in the previous example can itself be registered i
 	d2.Endpoint("http://localhost:8080/")
 
 	// The ping handler of `d2` will now call `d`s ping handler and as a result, monitor `d`s dependencies as well
-	http.ListenAndServe(":8081", http.HandlerFunc(d2.Handler()))
+	http.ListenAndServe(":8081", d2)
 
 */
 package detective
