@@ -1,0 +1,10 @@
+language: go
+
+go:
+ - master
+
+install:
+  - make setup
+
+script:
+- make

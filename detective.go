@@ -57,23 +57,24 @@ func (d *Detective) EndpointReq(req *http.Request) {
 }
 
 func (d *Detective) getState() State {
-	totalDependencyLength := len(d.dependencies) + len(d.endpoints)
-	subStates := make([]State, 0, totalDependencyLength)
+	depLength := len(d.dependencies)
+	totalDependencyLength := depLength + len(d.endpoints)
+	subStates := make([]State, totalDependencyLength)
 	var wg sync.WaitGroup
 	wg.Add(totalDependencyLength)
-	for _, dep := range d.dependencies {
-		go func() {
+	for iDep, dep := range d.dependencies {
+		go func(dep *Dependency, i int) {
 			s := dep.getState()
-			subStates = append(subStates, s)
+			subStates[i] = s
 			wg.Done()
-		}()
+		}(dep, iDep)
 	}
-	for _, e := range d.endpoints {
-		go func() {
+	for iEp, e := range d.endpoints {
+		go func(e *endpoint, i int) {
 			s := e.getState()
-			subStates = append(subStates, s)
+			subStates[depLength+i] = s
 			wg.Done()
-		}()
+		}(e, iEp)
 	}
 	wg.Wait()
 	s := State{Name: d.name}
