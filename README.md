@@ -1,6 +1,6 @@
 # Detective 🔎
 
-[![Build Status](https://travis-ci.org/sohamkamani/detective.svg?branch=master)](https://travis-ci.org/sohamkamani/detective) [![GoDoc](https://godoc.org/github.com/sohamkamani/detective?status.svg)](https://godoc.org/github.com/sohamkamani/detective)
+[![Build Status](https://travis-ci.org/sohamkamani/detective.svg?branch=master)](https://travis-ci.org/sohamkamani/detective) [![GoDoc](https://godoc.org/github.com/sohamkamani/detective?status.svg)](https://godoc.org/github.com/sohamkamani/detective) [![Coverage Status](https://coveralls.io/repos/github/sohamkamani/detective/badge.svg?branch=master)](https://coveralls.io/github/sohamkamani/detective?branch=master)
 
 Detective is a distributed application health monitoring library. It allows you to monitor arbitrary dependencies in your application, and compose other detective instances to create a distributed monitoring framework.
 
