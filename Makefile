@@ -7,6 +7,7 @@ setup:
 	mkdir -p $(GOPATH)/bin
 	mkdir ./out
 	go get -u github.com/golang/lint/golint
+	go get github.com/stretchr/testify
 
 compile:
 	go build -race ./...

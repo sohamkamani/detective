@@ -1,10 +1,12 @@
 # Detective 🔎
 
+[![Build Status](https://travis-ci.org/sohamkamani/detective.svg?branch=master)](https://travis-ci.org/sohamkamani/detective) 
+
 Detective is a distributed application health monitoring library. It allows you to monitor arbitrary dependencies in your application, and compose other detective instances to create a distributed monitoring framework.
 
 ## Usage
 
->For detailed documentation, visit the [Godocs page](https://godoc.org/github.com/sohamkamani/detective)
+>For detailed documentation, visit the [Godocs page](https://godoc.org/github.com/sohamkamani/detective) [![GoDoc](https://godoc.org/github.com/sohamkamani/detective?status.svg)](https://godoc.org/github.com/sohamkamani/detective)
 
 A typical service oriented architecture looks like this:
 
