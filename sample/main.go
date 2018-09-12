@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"github.com/sohamkamani/detective"
 	"net/http"
 	"time"
@@ -22,9 +21,14 @@ func (d db) ping() error {
 }
 
 func main() {
-	d := detective.New("sample")
+	d := detective.New("your application")
 	d1 := d.Dependency("cache")
 	d1.Detect(func() error {
+		time.Sleep(2500 * time.Millisecond)
+		return nil
+	})
+
+	d.Dependency("db").Detect(func() error {
 		time.Sleep(2500 * time.Millisecond)
 		return nil
 	})
@@ -35,11 +39,13 @@ func main() {
 		}
 	}()
 
-	d2 := detective.New("sample2")
-	g1 := d2.Dependency("db")
-	g1.Detect(func() error {
+	// Initialize a new detective instance
+	d2 := detective.New("Another application")
+
+	// Create a dependency, and register its detector function
+	d2.Dependency("cache").Detect(func() error {
 		time.Sleep(500 * time.Millisecond)
-		return errors.New("dkcndkcn")
+		return nil
 	})
 
 	if err := http.ListenAndServe(":8080", d2); err != nil {
