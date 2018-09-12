@@ -38,12 +38,11 @@ func TestDetective(t *testing.T) {
 	assert.True(t, depCalled)
 
 	t.Run("handler", func(t *testing.T) {
-		handler := d.Handler()
 		mockClient.On("Do", mock.Anything).Return(dm.MockJSONResponse(`{"name":"sample","status":"Ok", "active":true}`, http.StatusOK), nil).Once()
 		rw := &httptest.ResponseRecorder{Body: bytes.NewBuffer([]byte{})}
 		req, err := http.NewRequest(http.MethodGet, "", nil)
 		require.NoError(t, err)
-		handler(rw, req)
+		d.ServeHTTP(rw, req)
 		res := rw.Result()
 		assert.Equal(t, http.StatusOK, res.StatusCode)
 		var gotState State

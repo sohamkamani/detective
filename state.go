@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// State describes the current status of an entity. This entity can be a Dependency, or a Detective instance. A State can contain other States as well.
 type State struct {
 	Name         string        `json:"name"`
 	Ok           bool          `json:"active"`
@@ -13,9 +14,9 @@ type State struct {
 	Dependencies []State       `json:"dependencies,omitempty"`
 }
 
-func (s State) WithError(err error) State {
+func (s State) withError(err error) State {
 	if err == nil {
-		return s.WithOk()
+		return s.withOk()
 	}
 	ns := s
 	ns.Ok = false
@@ -23,23 +24,23 @@ func (s State) WithError(err error) State {
 	return ns
 }
 
-func (s State) WithOk() State {
+func (s State) withOk() State {
 	ns := s
 	ns.Ok = true
 	ns.Status = "Ok"
 	return ns
 }
 
-func (s State) WithDependencies(dependencies []State) State {
+func (s State) withDependencies(dependencies []State) State {
 	finalState := s
 	finalState.Dependencies = dependencies
-	if !NoErrors(dependencies) {
-		return finalState.WithError(errors.New("dependency failure"))
+	if !noErrors(dependencies) {
+		return finalState.withError(errors.New("dependency failure"))
 	}
-	return finalState.WithOk()
+	return finalState.withOk()
 }
 
-func NoErrors(states []State) bool {
+func noErrors(states []State) bool {
 	for i := range states {
 		if !states[i].Ok {
 			return false

@@ -13,7 +13,7 @@ type Detective struct {
 	name         string
 	client       Doer
 	dependencies []*Dependency
-	endpoints    []*Endpoint
+	endpoints    []*endpoint
 }
 
 // New creates a new Detective instance. To avoid confusion, the name provided should preferably be unique among dependent detective instances.
@@ -32,7 +32,7 @@ func (d *Detective) WithHTTPClient(c Doer) *Detective {
 
 // Dependency adds a new dependency to the Detective instance. The name provided should preferably be unique among dependencies registered within the same detective instance.
 func (d *Detective) Dependency(name string) *Dependency {
-	dependency := NewDependency(name)
+	dependency := newDependency(name)
 	d.dependencies = append(d.dependencies, dependency)
 	return dependency
 }
@@ -49,7 +49,7 @@ func (d *Detective) Endpoint(url string) error {
 
 // EndpointReq is similar to Endpoint, but takes an HTTP request object instead of a URL. Use this method if you want to customize the request to the ping handler of another detective instance.
 func (d *Detective) EndpointReq(req *http.Request) {
-	e := &Endpoint{
+	e := &endpoint{
 		client: d.client,
 		req:    *req,
 	}
@@ -77,7 +77,7 @@ func (d *Detective) getState() State {
 	}
 	wg.Wait()
 	s := State{Name: d.name}
-	return s.WithDependencies(subStates)
+	return s.withDependencies(subStates)
 }
 
 // ServeHTTP is the HTTP handler function for getting the state of the Detective instance

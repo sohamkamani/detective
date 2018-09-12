@@ -83,7 +83,7 @@ func TestDependentState(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := State{Name: tt.args.name}
-			if got := s.WithDependencies(tt.args.dependencies); !reflect.DeepEqual(got, tt.want) {
+			if got := s.withDependencies(tt.args.dependencies); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("DependentState() = %v, want %v", got, tt.want)
 			}
 		})

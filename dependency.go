@@ -4,8 +4,10 @@ import (
 	"time"
 )
 
+// The DetectorFunc type represents the function signature to check the health of a dependency
 type DetectorFunc func() error
 
+// The Dependency type represents a detectable unit. The function provided in the Detect method will be called to monitor the state of the dependency
 type Dependency struct {
 	name     string
 	detector DetectorFunc
@@ -18,13 +20,14 @@ func noopDetectorFunc() DetectorFunc {
 	}
 }
 
-func NewDependency(name string) *Dependency {
+func newDependency(name string) *Dependency {
 	return &Dependency{
 		name:     name,
 		detector: noopDetectorFunc(),
 	}
 }
 
+// Detect registers a function that will be called to detect the health of a dependency. If the dependency is healthy, a nil value should be returned as the error.
 func (d *Dependency) Detect(df DetectorFunc) {
 	d.detector = df
 }
@@ -39,7 +42,7 @@ func (d *Dependency) getState() State {
 	diff := time.Now().Sub(init)
 	s := State{Name: d.name, Latency: diff}
 	if err != nil {
-		return s.WithError(err)
+		return s.withError(err)
 	}
-	return s.WithOk()
+	return s.withOk()
 }

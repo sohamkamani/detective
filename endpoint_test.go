@@ -3,7 +3,6 @@ package detective
 import (
 	"errors"
 	dm "github.com/sohamkamani/detective/mock"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -95,14 +94,14 @@ func TestEndpoint(t *testing.T) {
 			req, err := http.NewRequest(http.MethodGet, "http://mock.com/", nil)
 			require.NoError(t, err)
 
-			e := &Endpoint{
+			e := &endpoint{
 				name:   "sample",
 				client: mockClient,
 				req:    *req,
 			}
 
 			s := e.getState()
-			assert.Equal(t, tt.expectedState, s)
+			assertStatesEqual(t, tt.expectedState, s)
 		})
 	}
 }
