@@ -1,7 +1,6 @@
 language: go
-
 go:
- - master
+  - "1.10"
 
 install:
   - make setup
