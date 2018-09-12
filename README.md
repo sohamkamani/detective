@@ -4,6 +4,8 @@ Detective is a distributed application health monitoring library. It allows you 
 
 ## Usage
 
+>For detailed documentation, visit the [Godocs page](https://godoc.org/github.com/sohamkamani/detective)
+
 A typical service oriented architecture looks like this:
 
 <p align="center"><img src="images/webapp-arch.png" width="70%"></p>
@@ -11,6 +13,8 @@ A typical service oriented architecture looks like this:
 Detective allows you to enable each application to monitor its own dependencies, including dependencies with contain another detective instance. By doing so, you can monitor your infrastructure in a distributed manner, where each service _only_ monitors _it's own_ dependencies.
 
 ![service oriented architecture with detective](images/detective-arch.png)
+
+### Monitoring a single application
 
 Detective exposes a straightforward API to monitor an arbitrary dependency:
 
@@ -47,7 +51,9 @@ The HTTP endpoint can then be used to monitor the health of the application. A `
 }
 ```
 
-This endpoint can also be used by other detective instances. For example, an application that makes use of "Another application" can monitor it as well:
+## Composing instances
+
+The endpoint in the previous example can also be used by other detective instances. For example, an application that makes use of "Another application" can monitor it as well:
 
 ```go
 // Create a new detective instance
