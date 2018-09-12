@@ -4,7 +4,7 @@ Detective is a distributed application health monitoring library. It allows you 
 
 A typical service oriented architecture looks like this:
 
-![service oriented architecture](images/webapp-arch.png)
+<p align="center"><img src="images/webapp-arch.png" width="70%"></p>
 
 You can replace the components with arbirtrary components of your own, but you get the idea. Detective allows you to enable each application to monitor its own dependencies, including dependencies with contain another detective instance. By doing so, you can monitor your infrastructure in a distributed manner, where each service _only_ monitors _it's own_ dependencies.
 
