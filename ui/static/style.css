@@ -1,0 +1,83 @@
+.node circle {
+  fill: #999;
+}
+
+.node text {
+  font: 14px sans-serif;
+}
+
+.latency {
+  font: 10px sans-serif;
+}
+
+.node--internal circle {
+  fill: #555;
+}
+
+.inactive circle {
+  fill: tomato;
+}
+
+.node--internal text {
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #555;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5px;
+}
+
+.link-inactive {
+  stroke: tomato;
+}
+
+header {
+  height: 40px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #999;
+  text-align: center;
+}
+
+.container {
+  height: calc(100vh - 90px);
+  display: flex;
+  padding: 0 10px;
+}
+
+.input-container {
+  padding: 0 10px;
+}
+
+.url-input {
+  width: 300px;
+}
+
+.diagram {
+  height: 100%;
+  width: 1000px;
+}
+
+.status-bar {
+  flex: 1;
+  padding-left: 10px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+h1,
+h2,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  margin-left: 20px;
+}

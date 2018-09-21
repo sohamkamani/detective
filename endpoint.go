@@ -38,5 +38,6 @@ func (e *endpoint) getState() State {
 	if err := json.NewDecoder(res.Body).Decode(&state); err != nil {
 		return s.withError(err)
 	}
+	state.Latency = diff
 	return state.withOk()
 }

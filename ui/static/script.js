@@ -9,6 +9,8 @@ var tree = d3.tree().size([ height, width - 160 ])
 
 var stratify = d3.stratify()
 
+var monitorURL = decodeURIComponent(window.location.search.split('=')[1])
+
 fetch('/getStatus', {
   method: 'POST',
   mode: 'cors',
@@ -20,7 +22,7 @@ fetch('/getStatus', {
   redirect: 'follow',
   referrer: 'no-referrer',
   body: JSON.stringify({
-    url: 'http://localhost:8081/'
+    url: monitorURL
   })
 })
   .then((response) => response.json())
@@ -118,10 +120,18 @@ const refreshFaultyNodeList = (normalizedData) => {
   while (faultyNodeList.firstChild) {
     faultyNodeList.removeChild(faultyNodeList.firstChild)
   }
-  normalizedData.filter((d) => !d.active).forEach((d) => {
-    const li = document.createElement('li')
-    const txt = document.createTextNode(d.name)
-    li.appendChild(txt)
-    faultyNodeList.appendChild(li)
+  const faultyNodes = normalizedData.filter((d) => !d.active)
+  if (faultyNodes.length === 0) {
+    faultyNodeList.appendChild(newLi('<none>'))
+  }
+  faultyNodes.forEach((d) => {
+    faultyNodeList.appendChild(newLi(d.name))
   })
+}
+
+const newLi = (txt) => {
+  const li = document.createElement('li')
+  const txtNode = document.createTextNode(txt)
+  li.appendChild(txtNode)
+  return li
 }

@@ -1,82 +1,29 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-        .node circle {
-                fill: #999;
-        }
+<html lang="en">
 
-        .node text {
-                font: 14px sans-serif;
-        }
-
-        .latency {
-                font: 10px sans-serif;
-        }
-
-        .node--internal circle {
-                fill: #555;
-        }
-
-        .inactive circle {
-                fill: tomato;
-        }
-
-        .node--internal text {
-                text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-        }
-
-        .link {
-                fill: none;
-                stroke: #555;
-                stroke-opacity: 0.4;
-                stroke-width: 1.5px;
-        }
-
-        .link-inactive {
-                stroke: tomato;
-        }
-
-        header {
-                height: 80px;
-        }
-
-        .container {
-                height: calc(100vh - 90px);
-                display: flex;
-        }
-
-        .diagram {
-                height: 100%;
-                width: 1000px;
-        }
-
-        .status-bar {
-                flex: 1;
-        }
-
-        body {
-                margin: 0;
-                padding: 0;
-        }
-
-        h1 {
-                margin: 0;
-                padding: 0;
-        }
-</style>
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
         <header>
                 <h1>Detective Dashboard</h1>
         </header>
-        <div class="container">
-                <svg id="diagram" class="diagram"></svg>
-                <div class="status-bar">
-                        <h2>Faulty nodes</h2>
-                        <ul id="faulty-node-list"></ul>
-                </div>
+        <div class="input-container">
+                <h3>Enter detective endpoint URL</h3>
+                <input id="url-input" class="url-input" type="text">
+                <button id="submit">Submit</button>
         </div>
 </body>
-<script src="d3.v4.min.js"></script>
-<script src="script.js">
+<script>
+        document.getElementById('submit').addEventListener('click', () => {
+                urlInput = document.getElementById('url-input').value
+                location.href = '/monitor.html?url=' + encodeURIComponent(urlInput)
+        })
 </script>
+
+</html>

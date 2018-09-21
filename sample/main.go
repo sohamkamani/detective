@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	// "errors"
 	"github.com/sohamkamani/detective"
 	"net/http"
 	"time"
@@ -31,7 +31,7 @@ func main() {
 
 	d.Dependency("db").Detect(func() error {
 		time.Sleep(250 * time.Millisecond)
-		return errors.New("failed")
+		return nil //errors.New("failed")
 	})
 	d.Endpoint("http://localhost:8080")
 	go func() {
