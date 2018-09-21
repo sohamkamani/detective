@@ -42,15 +42,15 @@ fetch('/getStatus', {
       }
     }
     addToNormalizedData(data)
+    refreshFaultyNodeList(normalizedData)
 
     var root = stratify(normalizedData).sort(function (a, b) {
       return a.height - b.height || a.id.localeCompare(b.id)
     })
 
-    var link = g
-      .selectAll('.link')
-      .data(tree(root).links())
-      .enter()
+    var link = g.selectAll('.link').data(tree(root).links()).enter().append('g')
+
+    link
       .append('path')
       .attr('class', (d) => {
         return 'link' + ' ' + (d.target.data.active ? 'link-active' : 'link-inactive')
@@ -66,6 +66,21 @@ fetch('/getStatus', {
             return d.x
           })
       )
+
+    link
+      .append('text')
+      .attr('class', 'latency')
+      .text((d) => {
+        const ms = Math.round(d.target.data.latency / 10e4) / 100
+        return ms + 'ms'
+      })
+      .attr('dy', -3)
+      .attr('x', (d) => {
+        return (d.source.y + d.target.y) / 2
+      })
+      .attr('y', (d) => {
+        return (d.source.x + d.target.x) / 2
+      })
 
     var node = g
       .selectAll('.node')
@@ -95,3 +110,18 @@ fetch('/getStatus', {
         return d.data.name
       })
   })
+
+const faultyNodeList = document.getElementById('faulty-node-list')
+
+const refreshFaultyNodeList = (normalizedData) => {
+  // remove all elements
+  while (faultyNodeList.firstChild) {
+    faultyNodeList.removeChild(faultyNodeList.firstChild)
+  }
+  normalizedData.filter((d) => !d.active).forEach((d) => {
+    const li = document.createElement('li')
+    const txt = document.createTextNode(d.name)
+    li.appendChild(txt)
+    faultyNodeList.appendChild(li)
+  })
+}

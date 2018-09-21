@@ -6,6 +6,10 @@
         }
 
         .node text {
+                font: 14px sans-serif;
+        }
+
+        .latency {
                 font: 10px sans-serif;
         }
 
@@ -37,19 +41,25 @@
         }
 
         .container {
-                height: calc(100vh - 80px);
+                height: calc(100vh - 90px);
+                display: flex;
         }
 
         .diagram {
                 height: 100%;
-                width: 80%
+                width: 1000px;
         }
 
         .status-bar {
-                width: 20%;
+                flex: 1;
         }
 
         body {
+                margin: 0;
+                padding: 0;
+        }
+
+        h1 {
                 margin: 0;
                 padding: 0;
         }
@@ -61,7 +71,10 @@
         </header>
         <div class="container">
                 <svg id="diagram" class="diagram"></svg>
-                <div class="status-bar"></div>
+                <div class="status-bar">
+                        <h2>Faulty nodes</h2>
+                        <ul id="faulty-node-list"></ul>
+                </div>
         </div>
 </body>
 <script src="d3.v4.min.js"></script>
