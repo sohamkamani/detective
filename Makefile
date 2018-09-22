@@ -8,8 +8,10 @@ setup:
 	mkdir ./out
 	go get -u github.com/golang/lint/golint
 	go get github.com/stretchr/testify
+	go get -u github.com/golang/dep/cmd/dep
 
 compile:
+	dep ensure
 	go build -race ./...
 
 build: compile fmt vet
