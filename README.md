@@ -4,6 +4,13 @@
 
 Detective is a distributed application health monitoring library. It allows you to monitor arbitrary dependencies in your application, and compose other detective instances to create a distributed monitoring framework.
 
+- [Detective 🔎](#detective-%F0%9F%94%8E)
+  - [Usage](#usage)
+    - [Monitoring a single application](#monitoring-a-single-application)
+    - [Composing instances](#composing-instances)
+    - [Circular dependencies](#circular-dependencies)
+  - [Dashboard](#dashboard)
+
 ## Usage
 
 >For detailed documentation, visit the [Godocs page](https://godoc.org/github.com/sohamkamani/detective) 
@@ -55,7 +62,7 @@ The HTTP endpoint can then be used to monitor the health of the application. A `
 }
 ```
 
-## Composing instances
+### Composing instances
 
 The endpoint in the previous example can also be used by other detective instances. For example, an application that makes use of "Another application" can monitor it as well:
 
@@ -145,8 +152,8 @@ go install github.com/sohamkamani/detective/detective-dashboard
 Then start the dashboard with:
 
 ```
-## Starts dashboard on http://localhost:8080/
 detective-dashboard -p 8080
+## Starts dashboard on http://localhost:8080/
 ```
 
 You will then have to enter the URL of any detective endpoint to view its dashboard.
