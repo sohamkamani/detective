@@ -35,7 +35,6 @@ func (s State) withOk() State {
 func (s State) withDependencies(dependencies []State) State {
 	finalState := s
 	finalState.Dependencies = dependencies
-	fmt.Println(dependencies, noErrors(dependencies))
 	if !noErrors(dependencies) {
 		return finalState.withError(errors.New("dependency failure"))
 	}
