@@ -78,6 +78,14 @@ ul {
   padding: 0;
 }
 
+h1 {
+  font-weight: lighter;
+}
+
+h3 {
+  font-weight: normal;
+}
+
 ul {
   margin-left: 20px;
 }

@@ -50,6 +50,7 @@ func (d *Detective) Endpoint(url string) error {
 // EndpointReq is similar to Endpoint, but takes an HTTP request object instead of a URL. Use this method if you want to customize the request to the ping handler of another detective instance.
 func (d *Detective) EndpointReq(req *http.Request) {
 	e := &endpoint{
+		name:   d.name,
 		client: d.client,
 		req:    *req,
 	}
