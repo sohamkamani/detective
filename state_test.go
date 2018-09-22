@@ -91,10 +91,10 @@ func TestDependentState(t *testing.T) {
 }
 
 func assertStatesEqual(t *testing.T, s1, s2 State) {
-	assert.Equal(t, s1.Name, s2.Name)
-	assert.Equal(t, s1.Ok, s2.Ok)
-	assert.Equal(t, s1.Status, s2.Status)
-	require.Equal(t, len(s1.Dependencies), len(s2.Dependencies))
+	assert.Equal(t, s1.Name, s2.Name, "names should be equal")
+	assert.Equal(t, s1.Ok, s2.Ok, "Ok should be equal")
+	assert.Equal(t, s1.Status, s2.Status, "Status should be equal")
+	require.Equal(t, len(s1.Dependencies), len(s2.Dependencies), "dependencies length should be equal")
 	for i := range s1.Dependencies {
 		assertStatesEqual(t, s1.Dependencies[i], s2.Dependencies[i])
 	}

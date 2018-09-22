@@ -34,6 +34,8 @@ d.Dependency("cache").Detect(func() error {
 http.ListenAndServe(":8081", d)
 ```
 
+[See the "regular usage" example](sample/regular-usage/main.go)
+
 The HTTP endpoint can then be used to monitor the health of the application. A `GET` request to `http://localhost:8081/` will return information on the health of the overall application:
 
 ```json
@@ -82,6 +84,8 @@ d.Endpoint("http://localhost:8081/")
 http.ListenAndServe(":8080", d)
 ```
 
+[See the "composing detective instances" example](sample/composing-detective-instances/main.go)
+
 Now, when we hit `GET http://localhost:8080/`, its detective instance will monitor its own dependencies as usual, but _also_ hit the previous dependencies endpoint, and as a result monitor it's dependencies as well :
 
 ```json
@@ -120,3 +124,7 @@ Now, when we hit `GET http://localhost:8080/`, its detective instance will monit
   ]
 }
 ```
+
+### Circular dependencies
+
+It's possible for two applications to depend on each other, either directly, or indirectly. Normally, if you registered two detective instances as dependents of each other, it would result in an infinite loop of HTTP calls to each others ping handler. Detective protects against this situation by adding information about a calling instance to the HTTP header of its request. The callee then inspects this header to find out if it was already part of the calling chain, in which case it ceases to send endpoint HTTP requests, and breaks the circular dependency chain.

@@ -18,9 +18,10 @@ type endpoint struct {
 	client Doer
 }
 
-func (e *endpoint) getState() State {
+func (e *endpoint) getState(fromChain string) State {
 	init := time.Now()
 	currentReq := e.req
+	currentReq.Header.Set(fromHeader, fromChain)
 	res, err := e.client.Do(&currentReq)
 	diff := time.Now().Sub(init)
 	s := State{Name: e.name, Latency: diff}
@@ -39,5 +40,5 @@ func (e *endpoint) getState() State {
 		return s.withError(err)
 	}
 	state.Latency = diff
-	return state.withOk()
+	return state
 }

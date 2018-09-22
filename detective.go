@@ -74,12 +74,13 @@ func (d *Detective) getState(fromChain []string) State {
 	}
 
 	epStates := []State{}
+	fromChainStr := strings.Join(append(fromChain, d.name), "|")
 	if !contains(fromChain, d.name) {
 		epStates = make([]State, epLength)
 		wg.Add(epLength)
 		for iEp, e := range d.endpoints {
 			go func(e *endpoint, i int) {
-				s := e.getState()
+				s := e.getState(fromChainStr)
 				epStates[i] = s
 				wg.Done()
 			}(e, iEp)

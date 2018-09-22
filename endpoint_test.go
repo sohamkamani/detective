@@ -100,7 +100,7 @@ func TestEndpoint(t *testing.T) {
 				req:    *req,
 			}
 
-			s := e.getState()
+			s := e.getState("")
 			assertStatesEqual(t, tt.expectedState, s)
 		})
 	}
