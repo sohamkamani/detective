@@ -3,6 +3,7 @@ package detective
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -57,34 +58,45 @@ func (d *Detective) EndpointReq(req *http.Request) {
 	d.endpoints = append(d.endpoints, e)
 }
 
-func (d *Detective) getState() State {
+func (d *Detective) getState(fromChain []string) State {
 	depLength := len(d.dependencies)
-	totalDependencyLength := depLength + len(d.endpoints)
-	subStates := make([]State, totalDependencyLength)
+	epLength := len(d.endpoints)
 	var wg sync.WaitGroup
-	wg.Add(totalDependencyLength)
+
+	depStates := make([]State, depLength)
+	wg.Add(depLength)
 	for iDep, dep := range d.dependencies {
 		go func(dep *Dependency, i int) {
 			s := dep.getState()
-			subStates[i] = s
+			depStates[i] = s
 			wg.Done()
 		}(dep, iDep)
 	}
-	for iEp, e := range d.endpoints {
-		go func(e *endpoint, i int) {
-			s := e.getState()
-			subStates[depLength+i] = s
-			wg.Done()
-		}(e, iEp)
+
+	epStates := []State{}
+	if !contains(fromChain, d.name) {
+		epStates = make([]State, epLength)
+		wg.Add(epLength)
+		for iEp, e := range d.endpoints {
+			go func(e *endpoint, i int) {
+				s := e.getState()
+				epStates[i] = s
+				wg.Done()
+			}(e, iEp)
+		}
 	}
 	wg.Wait()
 	s := State{Name: d.name}
-	return s.withDependencies(subStates)
+	return s.withDependencies(append(depStates, epStates...))
 }
+
+const fromHeader = "X_DETECTIVE_FROM_CHAIN"
 
 // ServeHTTP is the HTTP handler function for getting the state of the Detective instance
 func (d *Detective) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s := d.getState()
+	fromChainRaw := r.Header.Get(fromHeader)
+	fromChain := strings.Split(fromChainRaw, "|")
+	s := d.getState(fromChain)
 	sBody, err := json.Marshal(s)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -92,4 +104,13 @@ func (d *Detective) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(sBody)
 	return
+}
+
+func contains(ss []string, val string) bool {
+	for _, s := range ss {
+		if s == val {
+			return true
+		}
+	}
+	return false
 }

@@ -24,7 +24,7 @@ func TestDetective(t *testing.T) {
 		return nil
 	})
 
-	s := d.getState()
+	s := d.getState([]string{})
 	expectedState := State{
 		Name:   "sample",
 		Ok:     true,
