@@ -128,3 +128,25 @@ Now, when we hit `GET http://localhost:8080/`, its detective instance will monit
 ### Circular dependencies
 
 It's possible for two applications to depend on each other, either directly, or indirectly. Normally, if you registered two detective instances as dependents of each other, it would result in an infinite loop of HTTP calls to each others ping handler. Detective protects against this situation by adding information about a calling instance to the HTTP header of its request. The callee then inspects this header to find out if it was already part of the calling chain, in which case it ceases to send endpoint HTTP requests, and breaks the circular dependency chain.
+
+## Dashboard
+
+The dashboard helps visualize your dependency tree and detect any faulty dependencies, along with their latency:
+
+![dashbord picture](images/dashboard.png)
+
+To run the dashboard, install the binary with:
+
+```
+go get github.com/sohamkamani/detective/detective-dashboard
+go install github.com/sohamkamani/detective/detective-dashboard
+```
+
+Then start the dashboard with:
+
+```
+## Starts dashboard on http://localhost:8080/
+detective-dashboard -p 8080
+```
+
+You will then have to enter the URL of any detective endpoint to view its dashboard.
