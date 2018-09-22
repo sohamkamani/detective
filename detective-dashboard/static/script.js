@@ -1,14 +1,3 @@
-var svgElem = document.getElementById('diagram')
-var svg = d3.select('svg')
-console.log(svgElem.height.baseVal.value)
-var width = svgElem.width.baseVal.value
-var height = svgElem.height.baseVal.value
-var g = svg.append('g').attr('transform', 'translate(100,0)')
-
-var tree = d3.tree().size([ height, width - 160 ])
-
-var stratify = d3.stratify()
-
 var monitorURL = decodeURIComponent(window.location.search.split('=')[1])
 
 fetch('/getStatus', {
@@ -27,6 +16,16 @@ fetch('/getStatus', {
 })
   .then((response) => response.json())
   .then((data) => {
+    var svgElem = document.getElementById('diagram')
+    var svg = d3.select('svg')
+    var width = svgElem.width.baseVal.value
+    var height = svgElem.height.baseVal.value
+    var g = svg.append('g').attr('transform', 'translate(100,0)')
+
+    var tree = d3.tree().size([ height, width - 160 ])
+
+    var stratify = d3.stratify()
+
     var normalizedData = []
 
     function addToNormalizedData (d, parentId) {
@@ -44,7 +43,7 @@ fetch('/getStatus', {
       }
     }
     addToNormalizedData(data)
-    refreshFaultyNodeList(normalizedData)
+    refreshFaultyNodeList(data)
 
     var root = stratify(normalizedData).sort(function (a, b) {
       return a.height - b.height || a.id.localeCompare(b.id)
@@ -115,23 +114,29 @@ fetch('/getStatus', {
 
 const faultyNodeList = document.getElementById('faulty-node-list')
 
-const refreshFaultyNodeList = (normalizedData) => {
-  // remove all elements
-  while (faultyNodeList.firstChild) {
-    faultyNodeList.removeChild(faultyNodeList.firstChild)
-  }
-  const faultyNodes = normalizedData.filter((d) => !d.active)
-  if (faultyNodes.length === 0) {
-    faultyNodeList.appendChild(newLi('<none>'))
-  }
-  faultyNodes.forEach((d) => {
-    faultyNodeList.appendChild(newLi(d.name))
-  })
-}
-
 const newLi = (txt) => {
   const li = document.createElement('li')
   const txtNode = document.createTextNode(txt)
   li.appendChild(txtNode)
   return li
+}
+
+const refreshFaultyNodeList = (data, listNode) => {
+  listNode = listNode || faultyNodeList
+  while (listNode.firstChild) {
+    listNode.removeChild(listNode.firstChild)
+  }
+  const faultyNodes = data.dependencies.filter((d) => !d.active)
+  if (faultyNodes.length === 0) {
+    listNode.appendChild(newLi('<none>'))
+    return
+  }
+  faultyNodes.forEach((d) => {
+    listNode.appendChild(newLi(d.name + ': ' + d.status))
+    if (d.dependencies instanceof Array) {
+      const newList = document.createElement('ul')
+      listNode.appendChild(newList)
+      refreshFaultyNodeList(d, newList)
+    }
+  })
 }

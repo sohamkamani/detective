@@ -2,7 +2,6 @@ package detective
 
 import (
 	"errors"
-	"fmt"
 	"time"
 )
 

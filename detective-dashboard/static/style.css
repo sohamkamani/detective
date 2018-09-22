@@ -65,6 +65,10 @@ header {
   padding-left: 10px;
 }
 
+.faulty-node-list {
+  margin-top: 15px;
+}
+
 body {
   margin: 0;
   padding: 0;
