@@ -72,7 +72,7 @@ fetch('/getStatus', {
       .append('text')
       .attr('class', 'latency')
       .text((d) => {
-        const ms = Math.round(d.target.data.latency / 10e4) / 10
+        const ms = Math.round(d.target.data.latency / 1e5) / 10
         return ms + 'ms'
       })
       .attr('dy', -3)
