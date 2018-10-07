@@ -10,10 +10,11 @@ Detective is a distributed application health monitoring library. It allows you 
     - [Composing instances](#composing-instances)
     - [Circular dependencies](#circular-dependencies)
   - [Dashboard](#dashboard)
+  - [Examples](#examples)
+  - [API documentation](#api-documentation)
+  - [Other implementations](#other-implementations)
 
 ## Usage
-
->For detailed documentation, visit the [Godocs page](https://godoc.org/github.com/sohamkamani/detective) 
 
 A typical service oriented architecture looks like this:
 
@@ -140,7 +141,7 @@ It's possible for two applications to depend on each other, either directly, or 
 
 The dashboard helps visualize your dependency tree and detect any faulty dependencies, along with their latency:
 
-![dashbord picture](images/dashboard.png)
+![dashboard picture](images/dashboard.png)
 
 To run the dashboard, install the binary with:
 
@@ -157,3 +158,16 @@ detective-dashboard -p 8080
 ```
 
 You will then have to enter the URL of any detective endpoint to view its dashboard.
+
+## Examples
+
+- [Regular usage]((sample/regular-usage/main.go))
+- [Composing instances](sample/composing-detective-instances/main.go)
+
+## API documentation
+
+Detailed API documentation can be found on the [GoDocs page]((https://godoc.org/github.com/sohamkamani/detective)
+
+## Other implementations
+
+The detective library has also been implemented in Node.js : [https://github.com/sohamkamani/detective-node](https://github.com/sohamkamani/detective-node), is iteroperable with this implementation, and can be used as an endpoint.
