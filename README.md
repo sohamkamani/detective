@@ -161,12 +161,12 @@ You will then have to enter the URL of any detective endpoint to view its dashbo
 
 ## Examples
 
-- [Regular usage]((sample/regular-usage/main.go))
+- [Regular usage](sample/regular-usage/main.go)
 - [Composing instances](sample/composing-detective-instances/main.go)
 
 ## API documentation
 
-Detailed API documentation can be found on the [GoDocs page]((https://godoc.org/github.com/sohamkamani/detective)
+Detailed API documentation can be found on the [GoDocs page](https://godoc.org/github.com/sohamkamani/detective)
 
 ## Other implementations
 
